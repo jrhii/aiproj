@@ -2,34 +2,37 @@ from keras.models import Sequential
 from keras.layers import Dense
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
-dataset = np.genfromtxt("./winequalitytest.csv", delimiter=",")
+dataset = np.genfromtxt("./BlackFriday.csv", skip_header=1, delimiter=",")
 
 print('')
 print(dataset.shape)
 print('')
 
-# shuffle this data to make sure red adn white is evenly distributed
+# shuffle this data to make sure data is evenly distributed
 np.random.shuffle(dataset)
+
+dataSize = dataset.shape[0]
 
 # split data into train and validation
 #x is IV, y is DV
-xTrain = dataset[0:5000, 1:12]
-yTrain = dataset[0:5000, 12]
-xValidate = dataset[5000:, 1:12]
-yValidate = dataset[5000:, 12]
+xTrain = dataset[0:math.floor(dataSize*.7), 2:8]
+yTrain = dataset[0:math.floor(dataSize*.7), 11]
+xValidate = dataset[math.floor(dataSize*.7):, 2:8]
+yValidate = dataset[math.floor(dataSize*.7):, 11]
 
 # this is all for graphing simple relationship
-for col in range(12):
+for col in range(6):
     plt.figure(figsize=(4,4))
-    plt.plot(xTrain[:, (col-1)], yTrain, '.')
-    plt.xlabel(str(col - 1))
+    plt.plot(xTrain[:, (col)], yTrain, '.')
+    plt.xlabel(str(col))
     plt.ylabel('DV')
-    plt.savefig('winetest'+str(col-1)+'.png')
+    plt.savefig('test'+str(col)+'.png')
 
 # create neural network
 model = Sequential()
-model.add(Dense(66, input_dim=11, activation='relu'))
+model.add(Dense(66, input_dim=6, activation='relu'))
 model.add(Dense(44, activation='relu'))
 model.add(Dense(1, activation='sigmoid'))
 # print(model.summary())
@@ -38,7 +41,7 @@ model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 #train
-model.fit(xTrain, yTrain, epochs=150, batch_size=128)
+model.fit(xTrain, yTrain, epochs=3, batch_size=128)
 
 scores = model.evaluate(xTrain, yTrain)
 print(model.metrics_names)
