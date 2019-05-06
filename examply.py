@@ -1,5 +1,6 @@
 from keras.models import Sequential
 from keras.layers import Dense
+from keras.layers import LeakyReLU
 import numpy as np
 import matplotlib.pyplot as plt
 import math
@@ -42,20 +43,21 @@ for col in range(inputDim):
 
 #simple fitting
 model = Sequential()
-model.add(Dense(1, input_dim=inputDim, activation='relu'))
+model.add(Dense(60, input_dim=inputDim))
+model.add(LeakyReLU(alpha=0.01))
 
 # create neural network
 # model = Sequential()
 # model.add(Dense(inputDim*2, input_dim=inputDim, activation='relu'))
-# model.add(Dense(inputDim, activation='relu'))
-# model.add(Dense(1, activation='sigmoid'))
+model.add(Dense(inputDim, activation='relu'))
+model.add(Dense(1, activation='sigmoid'))
 print(model.summary())
 
 # check for proper neural connections
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 #train.  We are doing a big batch size here because we want to make sure we get some fraud data
-model.fit(xTrain, yTrain, epochs=350, batch_size=10000)
+model.fit(xTrain, yTrain, epochs=150, batch_size=10000)
 
 scores = model.evaluate(xTrain, yTrain)
 print(model.metrics_names)
@@ -69,7 +71,7 @@ print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
 #check what models were predicted
 prediction = model.predict(xValidate)
 
-
+'''
 #import less nonFroud values for a more balancedataset
 fraudData = bulkDataset[bulkDataset[:, -1] == 1]
 fraudDataLength = len(fraudData)
@@ -118,7 +120,8 @@ def balancedRun(percentage):
 
     #simple fitting
     model = Sequential()
-    model.add(Dense(1, input_dim=inputDim, activation='relu'))
+    model.add(Dense(1, input_dim=inputDim))
+    model.add(LeakyReLU(alpha=0.01))
 
     # create neural network
     # model = Sequential()
@@ -131,7 +134,7 @@ def balancedRun(percentage):
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     #train
-    model.fit(xTrain, yTrain, epochs=350, batch_size=1000)
+    model.fit(xTrain, yTrain, epochs=150, batch_size=1000)
 
     scores = model.evaluate(xTrain, yTrain)
     print(model.metrics_names)
@@ -141,3 +144,4 @@ def balancedRun(percentage):
 balancedRun(.01)
 balancedRun(.1)
 balancedRun(1)
+'''

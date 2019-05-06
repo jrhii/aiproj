@@ -19,6 +19,6 @@ City category was mapped as follows
 For stay in current years, `4+` was changed to `4`
 `P` was removed from every product id, as the numbers are still unique without the P prefix that they all share
 
-#notes for credit card
+# notes for credit card
 initial simple run shows high accuracy, but this is probably not very reliable taking into the large unbalance of
-out data (only .172% fraud).  
+out data (only .172% fraud).
