@@ -1,147 +1,97 @@
 from keras.models import Sequential
 from keras.layers import Dense
-from keras.layers import LeakyReLU
 import numpy as np
 import matplotlib.pyplot as plt
 import math
-import csv
 import os
 
-
-bulkDataset = np.genfromtxt("./creditcard.csv", delimiter=",")
-
-print('bulk data')
-print('-----------------')
-print(bulkDataset.shape)
-print('')
-
-# shuffle this data to make sure data is evenly distributed
-np.random.shuffle(bulkDataset)
-
-dataSize = bulkDataset.shape[0]
-
-# split data into train and validation
-#x is IV, y is DV
-xTrain = bulkDataset[0:math.floor(dataSize*.7), :30]
-yTrain = bulkDataset[0:math.floor(dataSize*.7), 30]
-xValidate = bulkDataset[math.floor(dataSize*.7):, :30]
-yValidate = bulkDataset[math.floor(dataSize*.7):, 30]
-
-inputDim = len(xValidate[0])
-
-if not os.path.exists('allData'):
-    os.makedirs('allData')
-
-# this is all for graphing simple relationship
-for col in range(inputDim):
-    plt.figure(figsize=(4,4))
-    plt.plot(xTrain[:, (col)], yTrain, '.')
-    plt.xlabel(str(col))
-    plt.ylabel('Fraudulent')
-    plt.savefig('allData/Col'+str(col)+'.png')
-    plt.close()
-
-#simple fitting
-model = Sequential()
-model.add(Dense(60, input_dim=inputDim))
-model.add(LeakyReLU(alpha=0.01))
-
-# create neural network
-# model = Sequential()
-# model.add(Dense(inputDim*2, input_dim=inputDim, activation='relu'))
-model.add(Dense(inputDim, activation='relu'))
-model.add(Dense(1, activation='sigmoid'))
-print(model.summary())
-
-# check for proper neural connections
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-
-#train.  We are doing a big batch size here because we want to make sure we get some fraud data
-model.fit(xTrain, yTrain, epochs=150, batch_size=10000)
-
-scores = model.evaluate(xTrain, yTrain)
-print(model.metrics_names)
-print(scores)
-print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
-
-#check against validaiton
-scores = model.evaluate(xValidate, yValidate)
-print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
-
-#check what models were predicted
-prediction = model.predict(xValidate)
-
-'''
-#import less nonFroud values for a more balancedataset
-fraudData = bulkDataset[bulkDataset[:, -1] == 1]
-fraudDataLength = len(fraudData)
-validData = bulkDataset[bulkDataset[:, -1] == 0]
-
-
-#1%
-def balancedRun(percentage):
-    newValidDateLength = int(fraudDataLength/percentage)
-    #shuffle random data set to try to get consistently random valid data
-    np.random.shuffle(validData)
-    balancedDataset = np.concatenate([fraudData, validData[:newValidDateLength]])
-
-    print(str(percentage) + "fraud data ")
-    print('-----------------')
-    print(balancedDataset.shape)
+def doRun(xTrain, yTrain, xValidate, yValidate, dvName, isBasic = False):
     print('')
-
-    # shuffle this data to make sure data is evenly distributed
-    np.random.shuffle(balancedDataset)
-
-    dataSize = balancedDataset.shape[0]
-
-    # split data into train and validation
-    #x is IV, y is DV
-    trainPercent = .8 if dataSize > 1000 else .7
-
-    xTrain = balancedDataset[0:math.floor(dataSize*trainPercent), :30]
-    yTrain = balancedDataset[0:math.floor(dataSize*trainPercent), 30]
-    xValidate = balancedDataset[math.floor(dataSize*trainPercent):, :30]
-    yValidate = balancedDataset[math.floor(dataSize*trainPercent):, 30]
+    print('-----------------')
+    print('')
 
     inputDim = len(xValidate[0])
 
-    if not os.path.exists(str(percentage)):
-        os.makedirs(str(percentage))
+    if not os.path.exists('studentData'):
+        os.makedirs('studentData')
 
-    # this is all for graphing simple relationship
-    for col in range(inputDim):
-        plt.figure(figsize=(4,4))
-        plt.plot(xTrain[:, (col)], yTrain, '.')
-        plt.xlabel(str(col))
-        plt.ylabel('Fraudulent')
-        plt.savefig(str(percentage) + '/DataCol'+str(col)+'.png')
-        plt.close()
+    if not os.path.exists('studentData/' + dvName):
+        os.makedirs('studentData/' + dvName)
 
-    #simple fitting
     model = Sequential()
-    model.add(Dense(1, input_dim=inputDim))
-    model.add(LeakyReLU(alpha=0.01))
 
-    # create neural network
-    # model = Sequential()
-    # model.add(Dense(inputDim*2, input_dim=inputDim, activation='relu'))
-    # model.add(Dense(inputDim, activation='relu'))
-    # model.add(Dense(1, activation='sigmoid'))
+    if (isBasic):
+        # this is all for graphing simple relationship
+        for col in range(inputDim):
+            plt.figure(figsize=(4,4))
+            plt.plot(xTrain[:, (col)], yTrain, '.')
+            plt.xlabel(str(col))
+            plt.ylabel('Grade')
+            plt.savefig('studentData/' + dvName + '/Col'+str(col)+'.png')
+            plt.close()
+            
+        #simple fitting
+        model.add(Dense(1, input_dim=inputDim, activation="relu"))
+    else:
+        #complex
+        model.add(Dense(50, input_dim=inputDim, activation="relu"))
+
+        # create neural network
+        model.add(Dense(35, activation='relu'))
+        model.add(Dense(20, activation='relu'))
+        model.add(Dense(10, activation='relu'))
+        model.add(Dense(5, activation='relu'))
+        model.add(Dense(1, activation='relu'))
+
     print(model.summary())
 
     # check for proper neural connections
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss='mse', optimizer='adam', metrics=['mae', 'mse'])
 
-    #train
-    model.fit(xTrain, yTrain, epochs=150, batch_size=1000)
+    #train.
+    model.fit(xTrain, yTrain, epochs=150, batch_size=10)
 
     scores = model.evaluate(xTrain, yTrain)
     print(model.metrics_names)
     print(scores)
-    print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
+    print("\n%s: %.2f" % (model.metrics_names[1], scores[1]))
 
-balancedRun(.01)
-balancedRun(.1)
-balancedRun(1)
-'''
+    #check against validaiton
+    scores = model.evaluate(xValidate, yValidate)
+    print("\n%s: %.2f" % (model.metrics_names[1], scores[1]))
+
+    #check what models were predicted
+    prediction = model.predict(xValidate)
+
+
+
+dataset = np.genfromtxt("./StudentsPerformance.csv", skip_header=1, delimiter=",")
+# shuffle this data to make sure data is evenly distributed
+np.random.shuffle(dataset)
+
+dataSize = dataset.shape[0]
+
+#run data for each test score
+for x in range(3):
+    index = x + 5
+
+    dvName = 'Math'
+    if index == 6:
+        dvName = 'Reading'
+    elif index == 7:
+        dvName = 'Writing'
+
+    # split data into train and validation
+    #x is IV, y is DV
+    xTrain = dataset[1:math.floor(dataSize*.8), :5]
+    yTrain = dataset[1:math.floor(dataSize*.8), index]
+    xValidate = dataset[math.floor(dataSize*.8):, :5]
+    yValidate = dataset[math.floor(dataSize*.8):, index]
+
+    print(dvName + ' basic run')
+    doRun(xTrain, yTrain, xValidate, yValidate, dvName, True)
+    print(dvName + ' multi layered run')
+    doRun(xTrain, yTrain, xValidate, yValidate, dvName)
+
+print('\a')
+# print(model.get_weights())

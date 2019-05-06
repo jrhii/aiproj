@@ -21,4 +21,8 @@ For stay in current years, `4+` was changed to `4`
 
 # notes for credit card
 initial simple run shows high accuracy, but this is probably not very reliable taking into the large unbalance of
-out data (only .172% fraud).
+out data (only .172% fraud).  After a lot of trials, deciding to depart from credit card data, as it was too difficult to train given the high disparity in classification
+
+# notes for student performance
+Gender is nd heaviest weight in math, but least weighted in writing.  For all, the biggest weight is whether lunch is free or not,
+which points to socieconomic factors weighing heavily on performance
