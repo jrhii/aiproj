@@ -6,7 +6,6 @@ import math
 import os
 
 def doRun(xTrain, yTrain, xValidate, yValidate, dvName, isBasic = False):
-    print('')
     print('-----------------')
     print('')
 
@@ -31,10 +30,10 @@ def doRun(xTrain, yTrain, xValidate, yValidate, dvName, isBasic = False):
             plt.close()
             
         #simple fitting
-        model.add(Dense(1, input_dim=inputDim, activation="relu"))
+        model.add(Dense(1, input_dim=inputDim, activation="linear"))
     else:
         #complex
-        model.add(Dense(50, input_dim=inputDim, activation="relu"))
+        model.add(Dense(50, input_dim=inputDim, activation="linear"))
 
         # create neural network
         model.add(Dense(35, activation='relu'))
@@ -49,7 +48,7 @@ def doRun(xTrain, yTrain, xValidate, yValidate, dvName, isBasic = False):
     model.compile(loss='mse', optimizer='adam', metrics=['mae', 'mse'])
 
     #train.
-    model.fit(xTrain, yTrain, epochs=150, batch_size=10)
+    model.fit(xTrain, yTrain, epochs=150, batch_size=10, verbose=0)
 
     scores = model.evaluate(xTrain, yTrain)
     print(model.metrics_names)
@@ -62,6 +61,34 @@ def doRun(xTrain, yTrain, xValidate, yValidate, dvName, isBasic = False):
 
     #check what models were predicted
     prediction = model.predict(xValidate)
+
+
+def derivedMathModel(npData):
+    weightData = [7.7748566,4.087211,2.8909693,14.525878,7.3228226]
+    return weightData[0]*npData[0] + weightData[1]*npData[1] + weightData[2]*npData[2] + weightData[3]*npData[3] + weightData[4]*npData[4] + 34.513798
+
+def derivedReadingModel(npData):
+    weightData = [-5.4185405,3.8257022,4.065463,12.958875,12.424449]
+    return weightData[0]*npData[0] + weightData[1]*npData[1] + weightData[2]*npData[2] + weightData[3]*npData[3] + weightData[4]*npData[4] + 41.149826
+
+def derivedWritingModel(npData):
+    weightData = [-3.0376484,3.8570347,3.7368257,12.563914,10.253032]
+    return weightData[0]*npData[0] + weightData[1]*npData[1] + weightData[2]*npData[2] + weightData[3]*npData[3] + weightData[4]*npData[4] + 39.72748
+
+def doDerivedModelRun(xValidate, yValidate, derivedModel):
+    cumulativeAbsoluteError = 0
+    cumulativeSquaredError = 0
+
+    for index in range(len(xValidate)):
+        estimatedValue = derivedModel(xValidate[index])
+        absoluteError = abs(estimatedValue - yValidate[index])
+        cumulativeAbsoluteError += absoluteError
+        cumulativeSquaredError += absoluteError * absoluteError
+
+    meanAbsoluteError = cumulativeAbsoluteError/len(xValidate)
+    meanSquaredError = cumulativeSquaredError/len(xValidate)
+    print("Mean Absolute Error: %f" % meanAbsoluteError)
+    print("Mean Squared Error: %f" % meanSquaredError)
 
 
 
@@ -88,10 +115,19 @@ for x in range(3):
     xValidate = dataset[math.floor(dataSize*.8):, :5]
     yValidate = dataset[math.floor(dataSize*.8):, index]
 
-    print(dvName + ' basic run')
+    print('\n------------------------')
+    print(dvName + ' basic run\n')
     doRun(xTrain, yTrain, xValidate, yValidate, dvName, True)
-    print(dvName + ' multi layered run')
+    print('')
+    print(dvName + ' multi layered run\n')
     doRun(xTrain, yTrain, xValidate, yValidate, dvName)
-
-print('\a')
-# print(model.get_weights())
+    # Do our models we made ourselves from an earlier trained model
+    if dvName == 'Math':
+        print("\nMath Score Derived Model Run")
+        doDerivedModelRun(xValidate, yValidate, derivedMathModel)
+    elif dvName == 'Reading':
+        print("\nReading Score Derived Model Run")
+        doDerivedModelRun(xValidate, yValidate, derivedReadingModel)
+    elif dvName == 'Writing':
+        print("\nWriting Score Derived Model Run")
+        doDerivedModelRun(xValidate, yValidate, derivedWritingModel)
