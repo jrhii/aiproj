@@ -38,7 +38,7 @@ def doRun(xTrain, yTrain, xValidate, yValidate, dvName, isBasic = False):
         # create neural network
         model.add(Dense(35, activation='linear'))
         model.add(Dense(20, activation='linear'))
-        model.add(Dense(10, activation='liner'))
+        model.add(Dense(10, activation='linear'))
         model.add(Dense(5, activation='linear'))
         model.add(Dense(1, activation='linear'))
 
@@ -61,7 +61,7 @@ def doRun(xTrain, yTrain, xValidate, yValidate, dvName, isBasic = False):
 
     #check what models were predicted
     prediction = model.predict(xValidate)
-    
+
     plt.figure(figsize=(4,4))
     plt.plot(yValidate, prediction, '.')
     plt.xlabel('Correct values')
@@ -70,16 +70,31 @@ def doRun(xTrain, yTrain, xValidate, yValidate, dvName, isBasic = False):
 
 
 def derivedMathModel(npData):
-    weightData = [7.7748566,4.087211,2.8909693,14.525878,7.3228226]
-    return weightData[0]*npData[0] + weightData[1]*npData[1] + weightData[2]*npData[2] + weightData[3]*npData[3] + weightData[4]*npData[4] + 34.513798
+    weightData = [2.6906877,-1.5936518,0.5222445,2.9739928,3.789481,-0.97764665,3.7083657,4.6513343,2.249893,-7.829781,5.7324038,2.6812954]
+
+    prediction = 62.48143
+    for index in range(len(weightData)):
+        prediction += weightData[index]*npData[index]
+
+    return prediction
 
 def derivedReadingModel(npData):
-    weightData = [-5.4185405,3.8257022,4.065463,12.958875,12.424449]
-    return weightData[0]*npData[0] + weightData[1]*npData[1] + weightData[2]*npData[2] + weightData[3]*npData[3] + weightData[4]*npData[4] + 41.149826
+    weightData = [-3.3387806,-0.9136137,2.2879055,3.6926124,0.07265424,-0.8841467,3.6134818,5.0034957,2.10664,-8.865663,3.908539,3.569657]
+
+    prediction = 65.25066
+    for index in range(len(weightData)):
+        prediction += weightData[index]*npData[index]
+
+    return prediction
 
 def derivedWritingModel(npData):
-    weightData = [-3.0376484,3.8570347,3.7368257,12.563914,10.253032]
-    return weightData[0]*npData[0] + weightData[1]*npData[1] + weightData[2]*npData[2] + weightData[3]*npData[3] + weightData[4]*npData[4] + 39.72748
+    weightData = [-4.333905,-1.4387798,1.8047222,5.002908,-0.30829197,-1.83069,3.7246437,4.6531396,3.6077342,-7.578493,4.3872924,4.922157]
+
+    prediction = 64.64882
+    for index in range(len(weightData)):
+        prediction += weightData[index]*npData[index]
+
+    return prediction
 
 def doDerivedModelRun(xValidate, yValidate, derivedModel):
     cumulativeAbsoluteError = 0
@@ -106,19 +121,19 @@ dataSize = dataset.shape[0]
 
 #run data for each test score
 for x in range(3):
-    index = x + 5
+    index = x + 12
 
     dvName = 'Math'
-    if index == 6:
+    if index == 13:
         dvName = 'Reading'
-    elif index == 7:
+    elif index == 14:
         dvName = 'Writing'
 
     # split data into train and validation
     #x is IV, y is DV
-    xTrain = dataset[1:math.floor(dataSize*.8), :5]
+    xTrain = dataset[1:math.floor(dataSize*.8), :12]
     yTrain = dataset[1:math.floor(dataSize*.8), index]
-    xValidate = dataset[math.floor(dataSize*.8):, :5]
+    xValidate = dataset[math.floor(dataSize*.8):, :12]
     yValidate = dataset[math.floor(dataSize*.8):, index]
 
     print('\n------------------------')

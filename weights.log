@@ -1,36 +1,50 @@
+Using TensorFlow backend.
 
 ------------------------
 Math basic run
 
 -----------------
 
+WARNING:tensorflow:From /home/jim/aiProj/venv/lib/python3.5/site-packages/tensorflow/python/framework/op_def_library.py:263: colocate_with (from tensorflow.python.framework.ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Colocations handled automatically by placer.
 _________________________________________________________________
-Layer (type)                 Output Shape              Param #   
+Layer (type)                 Output Shape              Param #
 =================================================================
-dense_1 (Dense)              (None, 1)                 6         
+dense_1 (Dense)              (None, 1)                 13
 =================================================================
-Total params: 6
-Trainable params: 6
+Total params: 13
+Trainable params: 13
 Non-trainable params: 0
 _________________________________________________________________
 None
-
- 32/799 [>.............................] - ETA: 0s
-799/799 [==============================] - 0s 53us/step
+WARNING:tensorflow:From /home/jim/aiProj/venv/lib/python3.5/site-packages/tensorflow/python/ops/math_ops.py:3066: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.cast instead.
+2019-05-08 00:23:06.875216: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2019-05-08 00:23:06.897532: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2401000000 Hz
+2019-05-08 00:23:06.902516: I tensorflow/compiler/xla/service/service.cc:150] XLA service 0x5966a00 executing computations on platform Host. Devices:
+2019-05-08 00:23:06.907745: I tensorflow/compiler/xla/service/service.cc:158]   StreamExecutor device (0): <undefined>, <undefined>
+799/799 [==============================] - 0s 51us/step
 ['loss', 'mean_absolute_error', 'mean_squared_error']
-[183.6471219784924, 10.924331881077926, 183.6471219784924]
+[186.93330404307875, 10.884358811885752, 186.93330404307875]
 
-mean_absolute_error: 10.92
-
- 32/200 [===>..........................] - ETA: 0s
+mean_absolute_error: 10.88
 200/200 [==============================] - 0s 21us/step
 
-mean_absolute_error: 11.36
-[array([[ 7.7748566],
-       [ 4.087211 ],
-       [ 2.8909693],
-       [14.525878 ],
-       [ 7.3228226]], dtype=float32), array([34.513798], dtype=float32)]
+mean_absolute_error: 11.49
+[array([[ 2.6906877 ],
+       [-1.5936518 ],
+       [ 0.5222445 ],
+       [ 2.9739928 ],
+       [ 3.789481  ],
+       [-0.97764665],
+       [ 3.7083657 ],
+       [ 4.6513343 ],
+       [ 2.249893  ],
+       [-7.829781  ],
+       [ 5.7324038 ],
+       [ 2.6812954 ]], dtype=float32), array([62.48143], dtype=float32)]
 
 ------------------------
 Reading basic run
@@ -38,32 +52,35 @@ Reading basic run
 -----------------
 
 _________________________________________________________________
-Layer (type)                 Output Shape              Param #   
+Layer (type)                 Output Shape              Param #
 =================================================================
-dense_2 (Dense)              (None, 1)                 6         
+dense_2 (Dense)              (None, 1)                 13
 =================================================================
-Total params: 6
-Trainable params: 6
+Total params: 13
+Trainable params: 13
 Non-trainable params: 0
 _________________________________________________________________
 None
-
- 32/799 [>.............................] - ETA: 0s
-799/799 [==============================] - 0s 67us/step
+799/799 [==============================] - 0s 63us/step
 ['loss', 'mean_absolute_error', 'mean_squared_error']
-[188.35830785873088, 10.979714781530808, 188.35830785873088]
+[183.0600975905551, 10.709380982963552, 183.0600975905551]
 
-mean_absolute_error: 10.98
+mean_absolute_error: 10.71
+200/200 [==============================] - 0s 19us/step
 
- 32/200 [===>..........................] - ETA: 0s
-200/200 [==============================] - 0s 36us/step
-
-mean_absolute_error: 12.37
-[array([[-3.0376484],
-       [ 3.8570347],
-       [ 3.7368257],
-       [12.563914 ],
-       [10.253032 ]], dtype=float32), array([41.149826], dtype=float32)]
+mean_absolute_error: 11.77
+[array([[-3.3387806 ],
+       [-0.9136137 ],
+       [ 2.2879055 ],
+       [ 3.6926124 ],
+       [ 0.07265424],
+       [-0.8841467 ],
+       [ 3.6134818 ],
+       [ 5.0034957 ],
+       [ 2.10664   ],
+       [-8.865663  ],
+       [ 3.908539  ],
+       [ 3.569657  ]], dtype=float32), array([65.25066], dtype=float32)]
 
 ------------------------
 Writing basic run
@@ -71,30 +88,32 @@ Writing basic run
 -----------------
 
 _________________________________________________________________
-Layer (type)                 Output Shape              Param #   
+Layer (type)                 Output Shape              Param #
 =================================================================
-dense_3 (Dense)              (None, 1)                 6         
+dense_3 (Dense)              (None, 1)                 13
 =================================================================
-Total params: 6
-Trainable params: 6
+Total params: 13
+Trainable params: 13
 Non-trainable params: 0
 _________________________________________________________________
 None
-
- 32/799 [>.............................] - ETA: 3s
-160/799 [=====>........................] - ETA: 0s
-799/799 [==============================] - 0s 291us/step
+799/799 [==============================] - 0s 80us/step
 ['loss', 'mean_absolute_error', 'mean_squared_error']
-[173.79816489285312, 10.574091739439696, 173.79816489285312]
+[172.4160594343393, 10.419142015287663, 172.4160594343393]
 
-mean_absolute_error: 10.57
+mean_absolute_error: 10.42
+200/200 [==============================] - 0s 36us/step
 
- 32/200 [===>..........................] - ETA: 0s
-200/200 [==============================] - 0s 59us/step
-
-mean_absolute_error: 11.65
-[array([[-5.4185405],
-       [ 3.8257022],
-       [ 4.065463 ],
-       [12.958875 ],
-       [12.424449 ]], dtype=float32), array([39.72748], dtype=float32)]
+mean_absolute_error: 11.00
+[array([[-4.333905  ],
+       [-1.4387798 ],
+       [ 1.8047222 ],
+       [ 5.002908  ],
+       [-0.30829197],
+       [-1.83069   ],
+       [ 3.7246437 ],
+       [ 4.6531396 ],
+       [ 3.6077342 ],
+       [-7.578493  ],
+       [ 4.3872924 ],
+       [ 4.922157  ]], dtype=float32), array([64.64882], dtype=float32)]
