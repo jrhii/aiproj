@@ -36,11 +36,11 @@ def doRun(xTrain, yTrain, xValidate, yValidate, dvName, isBasic = False):
         model.add(Dense(50, input_dim=inputDim, activation="linear"))
 
         # create neural network
-        model.add(Dense(35, activation='relu'))
-        model.add(Dense(20, activation='relu'))
-        model.add(Dense(10, activation='relu'))
-        model.add(Dense(5, activation='relu'))
-        model.add(Dense(1, activation='relu'))
+        model.add(Dense(35, activation='linear'))
+        model.add(Dense(20, activation='linear'))
+        model.add(Dense(10, activation='liner'))
+        model.add(Dense(5, activation='linear'))
+        model.add(Dense(1, activation='linear'))
 
     print(model.summary())
 
@@ -61,6 +61,12 @@ def doRun(xTrain, yTrain, xValidate, yValidate, dvName, isBasic = False):
 
     #check what models were predicted
     prediction = model.predict(xValidate)
+    
+    plt.figure(figsize=(4,4))
+    plt.plot(yValidate, prediction, '.')
+    plt.xlabel('Correct values')
+    plt.ylabel('Predictions')
+    plt.savefig(dvName+'predictions')
 
 
 def derivedMathModel(npData):
